@@ -3,10 +3,12 @@
         <span class="text-2xl text-white font-sans font-semibold">No Recents</span>
     </div>
 </template>
-<script>
-export default {
-    
-}
+<script setup>
+onBeforeMount(() => {
+    if (!localStorage.getItem('loggedinUser')) {
+        router.push('/login')
+    }
+})
 </script>
 <style lang="">
     

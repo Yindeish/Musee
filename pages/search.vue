@@ -38,6 +38,12 @@ const searchText = ref('');
 const playLists = ref(null);
 const state = ref('pending');
 
+onBeforeMount(() => {
+    if (!localStorage.getItem('loggedinUser')) {
+        router.push('/login')
+    }
+})
+
 const search = async () => {
     const url = `https://spotify81.p.rapidapi.com/search?q=${searchText.value}%3CREQUIRED%3E&type=multi&offset=0&limit=10&numberOfTopResults=5`;
     const options = {

@@ -135,6 +135,11 @@ const getPlayListImg = async () => {
 }
 
 onBeforeMount(() => {
+    if (!localStorage.getItem('loggedinUser')) {
+        router.push('/login')
+    }
+
+    
      getPlayList();
     getPlayListImg();
     if (playList?.value?.[0]?.track?.playcount / 1000000 === 'NaN') {
