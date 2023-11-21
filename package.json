@@ -19,6 +19,8 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
-    "firebase": "^10.6.0"
+    "cookie-universal-nuxt": "^2.2.2",
+    "firebase": "^10.6.0",
+    "universal-cookie": "^6.1.1"
   }
 }

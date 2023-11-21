@@ -1,6 +1,6 @@
 <template lang="">
-    <div>
-        recents
+    <div class="w-full h-full flex justify-center">
+        <span class="text-2xl text-white font-sans font-semibold">No Recents</span>
     </div>
 </template>
 <script>
