@@ -1,6 +1,7 @@
 <template lang="">
     <div class="w-full h-full flex items-center justify-between">
-        <div>song</div>
+        <div v-if="!currentSong?.name" class="fonts-sans font-semibold text-lg">song</div>
+        <div class="fonts-sans font-semibold text-lg">{{currentSong?.name}}</div>
 
        <div>
                 <video ref="videoPlayer" class="w-[1px] h-[1px]" controls="" autoplay="" name="media"><source :src="currentSong?.preview_url" type="audio/mpeg"></video>

@@ -69,6 +69,7 @@ const state = ref('pending');
 const currentSong = ref(null);
 
 const { id } = useRoute().params;
+console.log("id", id)
 const trackId = id[0];
 console.log(trackId);
 
@@ -112,7 +113,7 @@ const getPlayList = async () => {
 }
 
 const getPlayListImg = async () => {
-   const url = `https://spotify81.p.rapidapi.com/album_tracks?id=${trackId}&offset=0&limit=300`;
+   const url = `https://spotify81.p.rapidapi.com/tracks?ids=${trackId}`;
     const options = {
         method: 'GET',
         headers: {
@@ -125,10 +126,11 @@ const getPlayListImg = async () => {
         state.value = 'loading';
         const response = await fetch(url, options);
         const result = await response.json();
-        const matchItem = result?.items?.find(item => item?.track?.album?.id == trackId);
-        console.log(result?.items?.[0]?.track?.album?.id)
-        playListImg.value = matchItem?.album?.images?.[0]?.url;
-        console.log(matchItem, playListImg.value)
+        // const matchItem = result?.items?.find(item => item?.track?.album?.id == trackId);
+        // console.log(result?.items?.[0]?.track?.album?.id)
+        // playListImg.value = matchItem?.album?.images?.[0]?.url;
+        playListImg.value = result?.tracks?.[0]?.album?.images?.[0]?.url;
+        console.log(playListImg.value)
     } catch (err) {
         console.log(err)
     }
@@ -145,6 +147,7 @@ onBeforeMount(() => {
     if (playList?.value?.[0]?.track?.playcount / 1000000 === 'NaN') {
         console.log('NAn')
         getPlayList();
+        getPlayListImg();
     }
     console.log(currentSong.value)
 
@@ -160,6 +163,7 @@ onMounted(() => {
     getPlayListImg();
     if (playList?.value?.[0]?.track?.playcount / 1000000 === 'NaN') {
         getPlayList();
+        getPlayListImg();
     }
    
     
