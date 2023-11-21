@@ -6,7 +6,7 @@
 
          <div class="w-full flex gap-3 overflow-x-scroll py-2">
             <div v-if="playLists && state !== 'loading'" :class="`w-[${playListsitems?.length}%] flex gap-2`">
-                <nuxt-link :to="`http://localhost:3000${link}/${item?.track?.preview_url}`" v-for="item in playLists" class="item-container flex flex-col gap-2 rounded-md hover:bg-gray-950 bg-gray-900 p-3 pb-1 w-[13rem] h-[17rem] cursor-pointer max-sm:hidden playlist-container--desktop">
+                <div v-for="item in playLists" @click="getTrack(item?.data?.id)" class="item-container flex flex-col gap-2 rounded-md hover:bg-gray-950 bg-gray-900 p-3 pb-1 w-[13rem] h-[17rem] cursor-pointer max-sm:hidden playlist-container--desktop">
                     <!-- Item poster -->
                     <div :class="`w-[100%] h-['100%'] flex-[0.95] rounded-md overflow-hidden relative`">
                         <img class="w-full h-full object-cover" :src="item?.data?.albumOfTrack?.coverArt?.sources?.[0]?.url" />
@@ -23,7 +23,7 @@
                             <nuxt-link v-for="artist in item?.track?.artists" :to="`/artist/${artist.uri}`" class="text-gray-400 text-xs">{{artist?.name}}</nuxt-link>
                         </div>
                     </div>
-                </nuxt-link>
+                </div>
             </div>
             <div v-if="state == 'loading'" class="flex items-center justify-center w-full h-[20vh]">
                 <IconLoader />
@@ -32,6 +32,8 @@
     </div>
 </template>
 <script setup>
+const router = useRouter();
+
 const searchText = ref('');
 const playLists = ref(null);
 const state = ref('pending');
@@ -51,10 +53,31 @@ const search = async () => {
         const response = await fetch(url, options);
         const result = await response.json();
         playLists.value = result?.tracks;
+
     } catch (error) {
         console.error(error);
     } finally {
         state.value = 'not-loading';
+    }
+}
+
+async function getTrack(trackId) {
+    const url = `https://spotify81.p.rapidapi.com/tracks?ids=${trackId}`;
+    const options = {
+        method: 'GET',
+        headers: {
+            'X-RapidAPI-Key': '7cfe79fb4cmsha97c9c0ea2a5ac4p1fd173jsn0f3c71c9c278',
+            'X-RapidAPI-Host': 'spotify81.p.rapidapi.com'
+        }
+    };
+
+    try {
+        const response = await fetch(url, options);
+        const result = await response.json();
+        const preview_url = result?.tracks?.[0]?.preview_url;
+        router.push(`/playlists/${trackId}/${preview_url}`);
+    } catch (error) {
+        console.error(error);
     }
 }
 

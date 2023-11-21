@@ -70,6 +70,7 @@ const currentSong = ref(null);
 
 const { id } = useRoute().params;
 const trackId = id[0];
+console.log(trackId);
 
 const fullPath = useRoute().fullPath;
 const urlRegex = /https?:\/\/\S+/;
