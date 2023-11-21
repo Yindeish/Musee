@@ -8,8 +8,8 @@
             <div v-if="playLists && state !== 'loading'" :class="`w-[${playListsitems?.length}%] flex gap-2`">
                 <nuxt-link :to="`http://localhost:3000${link}/${item?.track?.preview_url}`" v-for="item in playLists" class="item-container flex flex-col gap-2 rounded-md hover:bg-gray-950 bg-gray-900 p-3 pb-1 w-[13rem] h-[17rem] cursor-pointer max-sm:hidden playlist-container--desktop">
                     <!-- Item poster -->
-                    <div :class="`w-[${item?.track?.album?.images[0]?.width ?? '100%'} h-[${item?.track?.album?.images[0]?.width ?? '100%'} flex-[0.95] rounded-md overflow-hidden relative`">
-                        <img class="w-full h-full object-cover" :src="item?.track?.album?.images[0]?.url" />
+                    <div :class="`w-[100%] h-['100%'] flex-[0.95] rounded-md overflow-hidden relative`">
+                        <img class="w-full h-full object-cover" :src="item?.data?.albumOfTrack?.coverArt?.sources?.[0]?.url" />
                         <!-- Video icon -->
                         <div class="play-btn-container absolute z-10 bottom-2 right-2 cursor-pointer text-gray-400 playlist-play-icon--desktop">
                             <IconPlay cls="w-[50px] h-[50px] active:w-[45px] active:h-[45px]" />
@@ -25,15 +25,19 @@
                     </div>
                 </nuxt-link>
             </div>
+            <div v-if="state == 'loading'" class="flex items-center justify-center w-full h-[20vh]">
+                <IconLoader />
+            </div>
          </div>
     </div>
 </template>
 <script setup>
 const searchText = ref('');
 const playLists = ref(null);
+const state = ref('pending');
 
 const search = async () => {
-    const url = 'https://spotify81.p.rapidapi.com/search?q=%3CREQUIRED%3E&type=multi&offset=0&limit=10&numberOfTopResults=5';
+    const url = `https://spotify81.p.rapidapi.com/search?q=${searchText.value}%3CREQUIRED%3E&type=multi&offset=0&limit=10&numberOfTopResults=5`;
     const options = {
         method: 'GET',
         headers: {
@@ -43,11 +47,14 @@ const search = async () => {
     };
 
     try {
+        state.value = 'loading';
         const response = await fetch(url, options);
-        const result = await response.text();
-        console.log(result);
+        const result = await response.json();
+        playLists.value = result?.tracks;
     } catch (error) {
         console.error(error);
+    } finally {
+        state.value = 'not-loading';
     }
 }
 
