@@ -32,7 +32,7 @@
 
                     <div class="w-full flex max-sm:flex-col gap-3 max-sm:gap-1 justify-start items-center max-sm:items-start rounded-md  max-sm:p-1 cursor-pointer">
                     <div class="w-[50px] h-[50px] max-sm:w-[35px] max-sm:h-[35px] rounded-md overflow-hidden">
-                        <img class="w-full h-full object-contain" :src="playList?.[0]?.track?.album?.images[0]?.url" />
+                        <img class="w-full h-full object-contain" src="https://media.istockphoto.com/id/457945109/photo/hands-of-a-dj-mixing-music-at-disco.jpg?s=612x612&w=0&k=20&c=zFshaN_FtucyUvNCCrBmxmHhECvIrvJ3PucAHdK49no=" />
                     </div>
                     <div class="flex flex-col gap-3 max-sm:gap-1.5">
                         <span class="text-white max-sm:text-sm">{{playList?.[0]?.track?.name}}</span>
